@@ -1,0 +1,94 @@
+﻿@page "/Analysis"
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Clean Architecture Analysis</h2>
+                </div>
+                <div class="card-body">
+                    <section class="mb-4">
+                        <h4>Solution Structure</h4>
+                        <ul>
+                            <li><strong>Presentation Layer:</strong> Blazor components (e.g., <code>Home.razor</code>, <code>Analysis.razor</code>, <code>NavMenu.razor</code>, <code>MainLayout.razor</code>) handle UI and user interaction.</li>
+                            <li><strong>Application Layer:</strong> Contains business logic interfaces (e.g., <code>Application\Interfaces\IPeopleService.cs</code>).</li>
+                            <li><strong>Domain Layer:</strong> (Implied) Would contain core business entities and rules.</li>
+                            <li><strong>Infrastructure Layer:</strong> Handles data access and persistence (e.g., <code>Infrastructure\Data\DesignTimeDbContextFactory.cs</code>, <code>Infrastructure\Migrations\AppDbContextModelSnapshot.cs</code>).</li>
+                        </ul>
+                    </section>
+                    <section class="mb-4">
+                        <h4>Dependency Rule</h4>
+                        <ul>
+                            <li><strong>Presentation</strong> depends on <strong>Application</strong> via dependency injection (<code> &#64;inject Application.Interfaces.IPeopleService PeopleService</code>).</li>
+                            <li><strong>Application</strong> defines interfaces, not implementations, promoting inversion of control.</li>
+                            <li><strong>Infrastructure</strong> implements data access and is referenced by the application layer only through interfaces.</li>
+                        </ul>
+                    </section>
+                    <section class="mb-4">
+                        <h4>Separation of Concerns</h4>
+                        <ul>
+                            <li><strong>UI logic</strong> is kept in Blazor components.</li>
+                            <li><strong>Business logic</strong> is abstracted behind interfaces (<code>IPeopleService</code>).</li>
+                            <li><strong>Data access</strong> is isolated in the infrastructure layer.</li>
+                            <li><strong>Configuration</strong> is managed separately (<code>MessagesConfig.cs</code>, <code>appsettings.json</code>).</li>
+                        </ul>
+                    </section>
+                    <section class="mb-4">
+                        <h4>Dependency Injection</h4>
+                        <ul>
+                            <li>Services are injected into components, decoupling implementation from usage.</li>
+                            <li>The use of interfaces (<code>IPeopleService</code>) allows for easy swapping of implementations and facilitates testing.</li>
+                        </ul>
+                    </section>
+                    <section class="mb-4">
+                        <h4>Data Flow</h4>
+                        <ul>
+                            <li>UI components interact with the application layer via injected services.</li>
+                            <li>Application layer communicates with infrastructure for data retrieval and persistence.</li>
+                            <li>Domain entities are used for data transfer between layers.</li>
+                        </ul>
+                    </section>
+                    <section class="mb-4">
+                        <h4>Maintainability &amp; Testability</h4>
+                        <ul>
+                            <li>The use of interfaces and separation of layers makes the solution maintainable and testable.</li>
+                            <li>Business logic can be tested independently of UI and data access.</li>
+                            <li>Infrastructure can be replaced or mocked without affecting other layers.</li>
+                        </ul>
+                    </section>
+                    <section class="mb-4">
+                        <h4>Observations &amp; Recommendations</h4>
+                        <div class="alert alert-info">
+                            <ul class="mb-0">
+                                <li><strong>Domain Layer:</strong> Ensure core business entities and rules are defined in a dedicated domain project for maximum adherence.</li>
+                                <li><strong>Application Layer:</strong> Keep business logic out of UI components; use services for all business operations.</li>
+                                <li><strong>Infrastructure Layer:</strong> Reference application interfaces only; avoid direct dependencies on UI or domain logic.</li>
+                                <li><strong>Presentation Layer:</strong> Avoid business logic; focus on rendering and user interaction.</li>
+                            </ul>
+                        </div>
+                    </section>
+                    <section>
+                        <h4>Summary</h4>
+                        <div class="alert alert-success">
+                            <ul class="mb-0">
+                                <li>Clear separation of concerns.</li>
+                                <li>Dependency inversion via interfaces and DI.</li>
+                                <li>Maintainable and testable structure.</li>
+                                <li>Data and configuration are managed in appropriate layers.</li>
+                            </ul>
+                            <strong>Improvements:</strong>
+                            <ul>
+                                <li>Explicitly define and use a domain layer for entities and business rules.</li>
+                                <li>Continue to enforce boundaries between layers.</li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+                <div class="card-footer text-end">
+                    <a class="btn btn-outline-primary" href="/">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

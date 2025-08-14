@@ -1,0 +1,227 @@
+﻿@page "/"
+@inject Application.Interfaces.IPeopleService PeopleService
+@inject Microsoft.Extensions.Options.IOptions<MessagesConfig> MessagesConfig
+
+@rendermode InteractiveServer
+
+<PageTitle>Home</PageTitle>
+
+<h1>People Search</h1>
+
+<div class="search-container">
+    <div class="form-row">
+        <input class="form-control" placeholder="Last Name" @bind="lastName" />
+        <input class="form-control" placeholder="MI" @bind="mi" maxlength="1" style="width:60px;" />
+        <input class="form-control" placeholder="First Name" @bind="firstName" />
+        <input class="form-control" placeholder="Phone Number"
+               value="@phoneNumber"
+               @oninput="OnPhoneInput"
+               maxlength="14"
+               type="tel"
+               inputmode="numeric"
+               pattern="[0-9]*" />
+
+        <input class="form-control" placeholder="Cell Number"
+               value="@cellNumber"
+               @oninput="OnCellInput"
+               maxlength="14"
+               type="tel"
+               inputmode="numeric"
+               pattern="[0-9]*" />
+
+
+        <button class="btn btn-primary" @onclick="SearchPeople">Search</button>
+        <button class="btn btn-secondary" @onclick="RefreshAndClear">Refresh</button>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-info mt-2">@message</div>
+}
+
+<div class="grid-container">
+    <table class="table table-striped people-grid">
+        <thead>
+            <tr>
+                <th>Last Name</th>
+                <th>MI</th>
+                <th>First Name</th>
+                <th>Phone Number</th>
+                <th>Cell Number</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (peopleList != null && peopleList.Any())
+            {
+                @foreach (var person in peopleList)
+                {
+                    <tr class="grid-row @(selectedPerson?.PersonId == person.PersonId ? "table-active" : "")"
+                        @onclick="() => SelectPerson(person)"
+                        style="cursor:pointer;">
+                        <td>@person.LastName</td>
+                        <td>@person.MI</td>
+                        <td>@person.FirstName</td>
+                        <td>@person.PhoneNumber</td>
+                        <td>@person.CellNumber</td>
+                        <td>@person.Email</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">@MessagesConfig.Value.NoMatchingRecords</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<style>
+    .search-container {
+        margin: 2rem auto 1rem auto;
+        max-width: 1100px;
+        padding: 1rem;
+        background: #f5f5f5;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .form-row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .form-control {
+        min-width: 140px;
+        flex: 1 1 140px;
+    }
+
+    .grid-container {
+        margin: 2rem auto;
+        max-width: 1100px;
+    }
+
+    .people-grid {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+        .people-grid th, .people-grid td {
+            text-align: left;
+            padding: 0.75rem;
+            word-break: break-word;
+        }
+
+        .people-grid th {
+            background: #1976d2;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .people-grid tr:nth-child(even) {
+            background: #f2f6fc;
+        }
+
+    .table-active {
+        background-color: #bbdefb !important;
+    }
+</style>
+
+@code {
+    private string lastName = string.Empty;
+    private string mi = string.Empty;
+    private string firstName = string.Empty;
+    private string phoneNumber = string.Empty;
+    private string cellNumber = string.Empty;
+    private string message = string.Empty;
+    private List<Domain.Entities.Person> peopleList = new();
+    private Domain.Entities.Person? selectedPerson;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshPeople();
+    }
+
+    private async Task SearchPeople()
+    {
+        peopleList = (await Task.Run(() => PeopleService.Search(firstName, mi, lastName))).ToList();
+        selectedPerson = null;
+        SetMessageForResults();
+    }
+
+    private async Task RefreshPeople()
+    {
+        peopleList = (await Task.Run(() => PeopleService.GetAllPeople())).ToList();
+        selectedPerson = null;
+        message = string.Empty;
+    }
+
+    private async Task RefreshAndClear()
+    {
+        ClearFields();
+        peopleList = (await Task.Run(() => PeopleService.GetAllPeople())).ToList();
+        selectedPerson = null;
+        message = string.Empty;
+    }
+
+    private void ClearFields()
+    {
+        lastName = string.Empty;
+        mi = string.Empty;
+        firstName = string.Empty;
+        phoneNumber = string.Empty;
+        cellNumber = string.Empty;
+    }
+
+    private void SetMessageForResults()
+    {
+        message = peopleList.Any() ? string.Empty : MessagesConfig.Value.NoMatchingRecords;
+    }
+
+    private void OnPhoneInput(ChangeEventArgs e) => OnMaskedInput(e, v => phoneNumber = v);
+    private void OnCellInput(ChangeEventArgs e) => OnMaskedInput(e, v => cellNumber = v);
+
+
+    private void OnMaskedInput(ChangeEventArgs e, Action<string> setValue)
+    {
+        var raw = e.Value?.ToString() ?? string.Empty;
+        var digits = new string(raw.Where(char.IsDigit).ToArray());
+        setValue(FormatAsPhoneMask(digits));
+    }
+
+    private string FormatAsPhoneMask(string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return string.Empty;
+
+        var digits = new string(input.Where(char.IsDigit).ToArray());
+
+        if (digits.Length <= 3)
+            return $"({digits.PadRight(3, '_')}) ";
+        if (digits.Length <= 6)
+            return $"({digits.Substring(0, 3)}) {digits.Substring(3).PadRight(3, '_')}-";
+        if (digits.Length <= 10)
+            return $"({digits.Substring(0, 3)}) {digits.Substring(3, 3)}-{digits.Substring(6).PadRight(4, '_')}";
+
+        return $"({digits.Substring(0, 3)}) {digits.Substring(3, 3)}-{digits.Substring(6, 4)}";
+    }
+
+    private void SelectPerson(Domain.Entities.Person person)
+    {
+        selectedPerson = person;
+        lastName = person.LastName ?? string.Empty;
+        mi = person.MI ?? string.Empty;
+        firstName = person.FirstName ?? string.Empty;
+        phoneNumber = FormatAsPhoneMask(person.PhoneNumber ?? string.Empty);
+        cellNumber = FormatAsPhoneMask(person.CellNumber ?? string.Empty);
+        StateHasChanged();
+    }
+}
+    
