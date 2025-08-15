@@ -1,39 +1,104 @@
 @page "/about"
-<PageTitle>About</PageTitle>
+<PageTitle>Project README</PageTitle>
 
 <div class="about-container-pro">
     <div class="header-section">
-        <h2>About This Project</h2>
+        <h2>BlazorAppWebSearchUsingAI</h2>
+        <p class="subtitle">A Blazor application demonstrating Clean Architecture principles, modular design, and maintainable code structure.</p>
     </div>
-    <div class="intro-section">
-        <p>
-            <strong class="project-title">BlazorAppWebSearchUsingAI</strong> is a professional web application built with <span class="tech-highlight">Blazor</span> and <span class="tech-highlight">.NET 8</span>. Its primary function is to provide a simple, user-friendly interface for searching people in a database. The application demonstrates <span class="principle-highlight">clean architecture principles</span>, ensuring separation of concerns, maintainability, and scalability.
-        </p>
-    </div>
-    <div class="architecture-section">
-        <h3>Architecture Overview</h3>
+
+    <div class="section">
+        <h3>Documentation Links</h3>
         <ul>
-            <li><strong>Presentation Layer:</strong> <span class="layer-desc">Interactive UI built with Blazor, handling user input and displaying results.</span></li>
-            <li><strong>Domain Layer:</strong> <span class="layer-desc">Defines core business entities and repository interfaces for data access.</span></li>
-            <li><strong>Application Layer:</strong> <span class="layer-desc">Contains service interfaces for business operations and search logic.</span></li>
-            <li><strong>Infrastructure Layer:</strong> <span class="layer-desc">Implements data access using Entity Framework Core and SQL Server.</span></li>
+            <li> <NavLink href="/Analysis">Clean Architecture Analysis</NavLink></li>
+            <li> <NavLink href="/DatabaseSetup">Setup Database</NavLink></li>
         </ul>
     </div>
-    <div class="features-section">
-        <h3>Key Features</h3>
+
+    <div class="section">
+        <h3>Solution Overview</h3>
         <ul>
-            <li><span class="feature-highlight">Simple search functionality</span> for people records in a database.</li>
-            <li>Clean separation of UI, business logic, and data access.</li>
-            <li><span class="feature-highlight">Entity Framework Core</span> for robust, scalable data management.</li>
-            <li>Configuration-driven messaging for user feedback and validation.</li>
-            <li>Easy extensibility for new features and data sources.</li>
+            <li><strong>Presentation Layer:</strong> <span class="layer-desc">Blazor components such as <code>Home.razor</code>, <code>Analysis.razor</code>, <code>NavMenu.razor</code>, and <code>MainLayout.razor</code> handle UI and user interaction.</span></li>
+            <li><strong>Application Layer:</strong> <span class="layer-desc">Contains business logic interfaces (e.g., <code>Application/Interfaces/IPeopleService.cs</code>).</span></li>
+            <li><strong>Domain Layer:</strong> <span class="layer-desc">(Implied) Intended for core business entities and rules.</span></li>
+            <li><strong>Infrastructure Layer:</strong> <span class="layer-desc">Handles data access and persistence (e.g., <code>Infrastructure/Data/DesignTimeDbContextFactory.cs</code>, <code>Infrastructure/Migrations/AppDbContextModelSnapshot.cs</code>).</span></li>
         </ul>
+    </div>
+
+    <div class="section">
+        <h3>Key Architectural Principles</h3>
+        <ul>
+            <li><strong>Dependency Rule:</strong>
+                <ul>
+                    <li>Presentation depends on Application via dependency injection: <code>@@inject Application.Interfaces.IPeopleService PeopleService</code></li>
+                    <li>Application defines interfaces, not implementations, promoting inversion of control.</li>
+                    <li>Infrastructure implements data access and is referenced by the application layer only through interfaces.</li>
+                </ul>
+            </li>
+            <li><strong>Separation of Concerns:</strong>
+                <ul>
+                    <li>UI logic is kept in Blazor components.</li>
+                    <li>Business logic is abstracted behind interfaces (<code>IPeopleService</code>).</li>
+                    <li>Data access is isolated in the infrastructure layer.</li>
+                    <li>Configuration is managed separately (<code>MessagesConfig.cs</code>, <code>appsettings.json</code>).</li>
+                </ul>
+            </li>
+            <li><strong>Dependency Injection:</strong>
+                <ul>
+                    <li>Services are injected into components, decoupling implementation from usage.</li>
+                    <li>Interfaces allow for easy swapping of implementations and facilitate testing.</li>
+                </ul>
+            </li>
+            <li><strong>Data Flow:</strong>
+                <ul>
+                    <li>UI components interact with the application layer via injected services.</li>
+                    <li>Application layer communicates with infrastructure for data retrieval and persistence.</li>
+                    <li>Domain entities are used for data transfer between layers.</li>
+                </ul>
+            </li>
+            <li><strong>Maintainability &amp; Testability:</strong>
+                <ul>
+                    <li>Interfaces and separation of layers make the solution maintainable and testable.</li>
+                    <li>Business logic can be tested independently of UI and data access.</li>
+                    <li>Infrastructure can be replaced or mocked without affecting other layers.</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>Getting Started</h3>
+        <ul>
+            <li><strong>Prerequisites:</strong>
+                <ul>
+                    <li>Visual Studio 2022 (with "ASP.NET and web development" workload)</li>
+                    <li>.NET 8 SDK</li>
+                </ul>
+            </li>
+            <li><strong>Build and Run:</strong>
+                <ol>
+                    <li>Open the Solution: Launch Visual Studio 2022 and open <code>BlazorAppWebSearchUsingAI.sln</code>.</li>
+                    <li>Restore NuGet Packages: Visual Studio will restore packages automatically. If not, right-click the solution and select "Restore NuGet Packages".</li>
+                    <li>Build the Solution: Press <code>Ctrl+Shift+B</code> or use the "Build Solution" command.</li>
+                    <li>Run the Application: Set the Blazor project as the startup project, then press <code>F5</code> (debug) or <code>Ctrl+F5</code> (run without debugger).</li>
+                </ol>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h3>.gitignore Recommendation</h3>
+        <pre class="bg-light p-2 rounded border">
+**/bin/
+**/obj/
+.vs/
+        </pre>
     </div>
 </div>
 
 <style>
     .about-container-pro {
-        max-width: 800px;
+        max-width: 900px;
         margin: 2.5rem auto;
         padding: 2.5rem 2rem;
         background: linear-gradient(135deg, #e3f2fd 0%, #f9f9f9 100%);
@@ -44,32 +109,17 @@
     .header-section h2 {
         color: #1976d2;
         font-size: 2.2rem;
-        margin-bottom: 1.2rem;
+        margin-bottom: 0.5rem;
         letter-spacing: 1px;
         text-align: center;
     }
-    .intro-section {
-        margin-bottom: 1.5rem;
-        font-size: 1.15rem;
+    .subtitle {
         color: #333;
+        font-size: 1.15rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
     }
-    .project-title {
-        color: #1565c0;
-        font-weight: 600;
-        font-size: 1.1em;
-    }
-    .tech-highlight {
-        color: #388e3c;
-        font-weight: 500;
-    }
-    .principle-highlight {
-        color: #d84315;
-        font-weight: 500;
-        background: #fff3e0;
-        padding: 0 4px;
-        border-radius: 3px;
-    }
-    .architecture-section h3, .features-section h3 {
+    .section h3 {
         color: #1976d2;
         margin-top: 2rem;
         margin-bottom: 0.8rem;
@@ -78,7 +128,7 @@
         display: inline-block;
         padding-bottom: 2px;
     }
-    .architecture-section ul, .features-section ul {
+    .section ul, .section ol {
         margin-left: 1.2rem;
         margin-bottom: 0;
     }
@@ -86,14 +136,15 @@
         color: #455a64;
         font-size: 1.05em;
     }
-    .feature-highlight {
-        color: #0288d1;
-        font-weight: 500;
-        background: #e1f5fe;
-        padding: 0 4px;
-        border-radius: 3px;
+    pre {
+        font-size: 1em;
+        background: #f5f5f5;
+        border-radius: 4px;
+        padding: 0.75em;
+        margin-top: 0.5em;
+        margin-bottom: 1em;
     }
-    ul li {
+    ul li, ol li {
         margin-bottom: 0.5rem;
     }
 </style>
