@@ -3,7 +3,6 @@
 A Blazor application demonstrating Clean Architecture principles, modular design, and maintainable code structure.
 
 ---
-
 ## 📚 Documentation Links
 
 - [Clean Architecture Analysis](README_CleanArchitecture.md)

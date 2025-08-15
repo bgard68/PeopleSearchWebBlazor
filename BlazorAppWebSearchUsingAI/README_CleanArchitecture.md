@@ -3,6 +3,7 @@
 This document analyzes the solution for adherence to Clean Architecture principles.
 
 ---
+
 ## 📚 Documentation Links
 
 - [Project README](README.md)
