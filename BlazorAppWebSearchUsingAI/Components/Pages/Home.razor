@@ -13,7 +13,7 @@
         <input class="form-control" placeholder="Last Name" @bind="lastName" />
         <input class="form-control" placeholder="MI" @bind="mi" maxlength="1" style="width:60px;" />
         <input class="form-control" placeholder="First Name" @bind="firstName" />
-        <input class="form-control" placeholder="Phone Number"
+        <input class="form-control" placeholder="(___) ___-____"
                value="@phoneNumber"
                @oninput="OnPhoneInput"
                maxlength="14"
@@ -21,7 +21,7 @@
                inputmode="numeric"
                pattern="[0-9]*" />
 
-        <input class="form-control" placeholder="Cell Number"
+        <input class="form-control" placeholder="(___) ___-____"
                value="@cellNumber"
                @oninput="OnCellInput"
                maxlength="14"
