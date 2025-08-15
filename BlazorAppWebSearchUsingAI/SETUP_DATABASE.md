@@ -1,13 +1,6 @@
-﻿# Setting Up the Database Outside the Application
+﻿# Database Setup Guide
 
-This guide explains how to set up and update the database for the PeopleSearch solution using Entity Framework Core migrations, **outside of the application**. Reference this document from your main README for onboarding or deployment instructions.
-
----
-
-## 📚 Documentation Links
-
-- [Project README](README.md)  
-- [Clean Architecture Analysis](README_CleanArchitecture.md)
+This guide explains how to set up and update the database for the PeopleSearch solution using Entity Framework Core migrations.
 
 ---
 
@@ -15,35 +8,35 @@ This guide explains how to set up and update the database for the PeopleSearch s
 
 - .NET 8 SDK installed
 - Access to the solution source code
-- Database permissions as specified in `PeopleSearch/appsettings.json`
+- Database permissions as specified in `appsettings.json`
 
 ---
 
 ## Step-by-Step Instructions
 
 ### 1. Restore NuGet Packages
-**Directory:** Solution root  
-**Command:** dotnet restore
+- **Directory:** Solution root  
+- **Command:** dotnet restore
 
 ### 2. Build the Solution
-**Directory:** Solution root  
-**Command:** dotnet build
+- **Directory:** Solution root  
+- **Command:** dotnet build
 
 ### 3. Apply Migrations to Create/Update the Database
-**Directory:** Solution root  
-**Command:**  dotnet ef database update --project Infrastructure/Infrastructure.csproj --startup-project PeopleSearch/PeopleSearch.csproj
+- **Directory:** Solution root  
+- **Command:**  dotnet ef database update --project Infrastructure/Infrastructure.csproj --startup-project PeopleSearch/PeopleSearch.csproj
 
 
 - This will create the database (if it does not exist) and apply all migrations.
 
 ### 4. (Optional) Add a Migration if Models Have Changed
-**Directory:** Solution root  
-**Command:**  dotnet ef migrations add MigrationName --project Infrastructure/Infrastructure.csproj --startup-project PeopleSearch/PeopleSearch.csproj
+- **Directory:** Solution root  
+- **Command:**  dotnet ef migrations add MigrationName --project Infrastructure/Infrastructure.csproj --startup-project PeopleSearch/PeopleSearch.csproj
 
 - Replace `MigrationName` with a descriptive name for your migration.
 
 ### 5. Verify the Database
-**Directory:** N/A (use a database tool)  
+- **Directory:** N/A (use a database tool)  
 - Use SQL Server Management Studio, Azure Data Studio, or another tool to connect to the database specified in `appsettings.json` and verify tables and seed data.
 
 ## Summary Table
@@ -58,6 +51,3 @@ This guide explains how to set up and update the database for the PeopleSearch s
 
 ---
 
-## Back to Solution Overview
-
-Return to the main solution overview: [PeopleSearch/README.md](../README.md)

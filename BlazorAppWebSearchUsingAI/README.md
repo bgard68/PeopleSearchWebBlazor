@@ -2,15 +2,6 @@
 
 A Blazor application demonstrating Clean Architecture principles, modular design, and maintainable code structure.
 
----
-
-## 📚 Documentation Links
-
-- [Clean Architecture Analysis](README_CleanArchitecture.md)
-- [Database Setup Guide](SETUP_DATABASE.md)
-
----
-
 ## Solution Overview
 
 This solution is organized according to Clean Architecture, ensuring separation of concerns and maintainability.
