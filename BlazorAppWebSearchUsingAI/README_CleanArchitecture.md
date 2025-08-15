@@ -1,6 +1,14 @@
-# Clean Architecture Analysis
+﻿# Clean Architecture Analysis
 
 This document analyzes the solution for adherence to Clean Architecture principles.
+
+---
+## 📚 Documentation Links
+
+- [Project README](README.md)
+- [Database Setup Guide](SETUP_DATABASE.md)
+
+---
 
 ## 1. Solution Structure
 
