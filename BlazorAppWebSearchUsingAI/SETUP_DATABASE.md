@@ -4,6 +4,13 @@ This guide explains how to set up and update the database for the PeopleSearch s
 
 ---
 
+## 📚 Documentation Links
+
+- [Project README](README.md)
+- [Clean Architecture Analysis](README_CleanArchitecture.md)
+
+---
+
 ## Prerequisites
 
 - .NET 8 SDK installed
